@@ -27,5 +27,19 @@ def inl_button(message):
 	else:
 		bot.send_message(message.chat.id, 'Я не знаю что ответить 😢')
 
+
+@bot.callback_query_handler(func=lambda c: c.data == 'cost')
+def process_callback_cost_button(callback_query: types.CallbackQuery):
+	bot.answer_callback_query(callback_query.id)
+	bot.send_message(callback_query.from_user.id, 'Нажата кнопка cost!')
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+# Сохранение ввода пользователя
+def save_input(message):
+	open('input.txt', 'w').write(message.chat.id + ' | ' + message.text + '||')
+	bot.send_message(message.chat.id, 'Thank you!')
+	bot.send_message(message.chat.id + ' | ' + message.text)
+
+
 # RUN
 bot.polling(none_stop=True)
